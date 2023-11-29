@@ -9,7 +9,7 @@ When you run `python llava-websocket.py`, the checkpoint shards are loaded and s
 This project was tested on Ubuntu.
 
 ## Setup
-You should follow the LLaVA tutorial, so that you have the pretrained model / checkpoint shards ready. Then, put my script into your LLaVA directory and start it while in the LLaVA conda-environment (`conda activate llava).
+You should follow the LLaVA tutorial, so that you have the pretrained model / checkpoint shards ready. Then, put my script into your LLaVA directory and start it while in the LLaVA conda-environment (`conda activate llava`).
 
 `python llava-websocket.py --model-path liuhaotian/llava-v1.5-13b --load-4bit`
 
