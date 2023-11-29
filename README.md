@@ -1,2 +1,2 @@
 # LLaVA-WebSocket
-Python-based WebSocket for CLI-based LLaVA inference.
+Python-based WebSocket for CLI LLaVA inference.
