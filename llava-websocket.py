@@ -47,7 +47,6 @@ async def inference(websocket, path, args, model, tokenizer, image_processor, mo
         else:
             image_tensor = image_tensor.to(model_device, dtype=torch.float16)
 
-        # Handling conversation
         conv = conv_templates[args.conv_mode].copy()
         if model_config.mm_use_im_start_end:
             prompt_text = DEFAULT_IM_START_TOKEN + DEFAULT_IMAGE_TOKEN + DEFAULT_IM_END_TOKEN + '\n' + prompt_text
