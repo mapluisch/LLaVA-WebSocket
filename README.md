@@ -21,7 +21,7 @@ python llava-websocket.py [ARGS]
 
 ### Arguments
 
-Given that this project is based on LLaVA's `cli.py`, the same arguments can be specified
+Given that this project is based on LLaVA's `cli.py`, the following base arguments can be specified:
 ```
 --model-path, default="liuhaotian/llava-v1.5-13b"
 --model-base, default=None
@@ -34,7 +34,7 @@ Given that this project is based on LLaVA's `cli.py`, the same arguments can be 
 --debug, action="store_true"
 ```
 
-I've additionally added two more args that you can specify
+Additionally added args:
 ```
 --port, default=1995
 --verbose, action="store_true"
