@@ -38,10 +38,20 @@ I've additionally added two more args that you can specify
 ```
 --port, default=1995
 --verbose, action="store_true"
+--json, action="store_true"
 ```
 Using `--port [int]`, you can specify your own WebSocket port.
 
 Using `--verbose`, you will receive verbose output on the server-side console (WebSocket connection info, transmitted inference results).
+
+Using `--json`, the WebSocket responses will be formatted as JSON, containing a timestamp and the inference result: 
+
+```json
+{
+    "time": "11:48:52.632415",
+    "result": "The image features a wooden pier (...)"
+}
+```
 
 ## WebSocket Communication
 In your local LAN, clients can access the WebSocket via `ws://[your-ip]:1995`. Specify your own port when calling the python script via `--port [int]`.

@@ -6,6 +6,7 @@ import requests
 import torch
 import websockets
 import socket
+from datetime import datetime
 from io import BytesIO
 from PIL import Image
 
@@ -23,10 +24,13 @@ def load_image(image_data):
         image = Image.open(BytesIO(base64.b64decode(image_data))).convert('RGB')
     return image
 
+def format_json_response(time, result):
+    return json.dumps({"time": time.strftime("%H:%M:%S.%f"), "result": result})
+
 async def inference(websocket, path, args, model, tokenizer, image_processor, model_config, model_device):
-    client_ip = websocket.remote_address[0]
-    client_port = websocket.remote_address[1]
     if args.verbose:
+        client_ip = websocket.remote_address[0]
+        client_port = websocket.remote_address[1]
         print(f"Client connected: {client_ip}:{client_port}")
 
     async for message in websocket:
@@ -76,10 +80,16 @@ async def inference(websocket, path, args, model, tokenizer, image_processor, mo
                 use_cache=True,
                 stopping_criteria=[stopping_criteria])
 
-        outputs = tokenizer.decode(output_ids[0, input_ids.shape[1]:]).strip()
+        outputs = tokenizer.decode(output_ids[0, input_ids.shape[1]:]).replace('</s>', '').strip()
+
         if args.verbose:
             print("Sending: " + outputs)
-        await websocket.send(outputs)
+        
+        if args.json:
+            response = format_json_response(datetime.now(), outputs)
+            await websocket.send(response)
+        else:
+            await websocket.send(outputs)
 
 def main(args):
     disable_torch_init()
@@ -114,5 +124,6 @@ if __name__ == "__main__":
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("--port", type=int, default=1995)
     parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     main(args)
