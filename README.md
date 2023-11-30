@@ -54,7 +54,9 @@ Using `--json`, the WebSocket responses will be formatted as JSON, containing a 
 ```
 
 ## WebSocket Communication
-In your local LAN, clients can access the WebSocket via `ws://[your-ip]:1995`. Specify your own port when calling the python script via `--port [int]`.
+In your local network, clients can access the WebSocket via `ws://[your-ip]:1995`. Specify your own port when calling the python script via `--port [int]`.
+
+You can probably also make the WebSocket accessible from outside of your LAN via port forwarding.
 
 The WebSocket server waits for a JSON object:
 
