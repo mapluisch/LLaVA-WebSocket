@@ -4,21 +4,49 @@ Python-based WebSocket for CLI LLaVA inference. The WebSocket server receives pr
 ## Overview
 This project is a quick and simple implementation of LLaVA ([Website](https://llava-vl.github.io/), [GitHub](https://github.com/haotian-liu/LLaVA)) CLI-based inference via a Python WebSocket. It is based on LLaVA's own `cli.py`, adding WebSocket capabilites.
 
-When you run `python llava-websocket.py`, the checkpoint shards are loaded and stay in cache while a WebSocket server is started. Clients in your local network can send new prompts and images for inference without having to re-load checkpoint shards and without using Gradio.
+When running `python llava-websocket.py`, the checkpoint shards are loaded and stay in cache while a WebSocket server is started. Clients in your local network can send new prompts and images for inference without having to re-load checkpoint shards and without using Gradio.
+
+This project, in its current form, is not designed for conversation, but rather for one-time prompt processing, enabling the inference of various images and prompts based on individual requests. I might add conversation capabilities in the near future.
 
 This project was tested on Ubuntu.
 
 ## Setup
 You should follow the LLaVA tutorial, so that you have the pretrained model / checkpoint shards ready. Then, put my script into your LLaVA directory and start it while in the LLaVA conda-environment (`conda activate llava`).
 
+
+## Usage 
 ```
-python llava-websocket.py --model-path liuhaotian/llava-v1.5-13b --load-4bit
+python llava-websocket.py [ARGS]
 ```
 
-8-bit quantization should also work, but I have not tested it due to RAM constraints.
+8-bit quantization should also work, but I have not tested it due to VRAM constraints.
+
+### Arguments
+
+Given that this project is based on LLaVA's `cli.py`, the same arguments can be specified
+```
+--model-path, default="liuhaotian/llava-v1.5-13b"
+--model-base, default=None
+--device, default="cuda"
+--conv-mode, default=None
+--temperature, default=0.2
+--max-new-tokens, default=512
+--load-8bit, action="store_true"
+--load-4bit, action="store_true"
+--debug, action="store_true"
+```
+
+I've additionally added two more args that you can specify
+```
+--port, default=1995
+--verbose, action="store_true"
+```
+Using `--port [int]`, you can specify your own WebSocket port.
+
+Using `--verbose`, you will receive verbose output on the server-side console (WebSocket connection info, transmitted inference results).
 
 ## WebSocket Communication
-In your local LAN, clients can access the WebSocket via `ws://[your-ip]:1995`. You can specify your own port when calling the python script via `--websocket-port [int]`.
+In your local LAN, clients can access the WebSocket via `ws://[your-ip]:1995`. Specify your own port when calling the python script via `--port [int]`.
 
 The WebSocket server waits for a JSON object:
 
