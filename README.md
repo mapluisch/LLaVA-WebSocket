@@ -57,6 +57,14 @@ The WebSocket server waits for a JSON object:
 
 and returns the written inference result via the socket connection.
 
+### Demo
+https://github.com/mapluisch/LLaVA-WebSocket-Server/assets/31780571/9e63f3fa-da06-4645-b18b-202f886f8637
+
+The input image is LLaVA's test image: 
+
+<img src="https://llava-vl.github.io/static/images/view.jpg" alt="LLaVA's test image" style="width:50%;"/>
+(Source: https://llava-vl.github.io/static/images/view.jpg)
+
 ## Disclaimer
 This project is a prototype and serves as a basic example of using a WebSocket for LLaVA's CLI inference. Feel free to create a PR.
 
