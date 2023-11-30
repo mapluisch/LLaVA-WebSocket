@@ -8,7 +8,6 @@ import websockets
 import socket
 from io import BytesIO
 from PIL import Image
-from transformers import TextStreamer
 
 from llava.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 from llava.conversation import conv_templates, SeparatorStyle
@@ -25,6 +24,11 @@ def load_image(image_data):
     return image
 
 async def inference(websocket, path, args, model, tokenizer, image_processor, model_config, model_device):
+    client_ip = websocket.remote_address[0]
+    client_port = websocket.remote_address[1]
+    if args.verbose:
+        print(f"Client connected: {client_ip}:{client_port}")
+
     async for message in websocket:
         try:
             data = json.loads(message)
@@ -73,6 +77,8 @@ async def inference(websocket, path, args, model, tokenizer, image_processor, mo
                 stopping_criteria=[stopping_criteria])
 
         outputs = tokenizer.decode(output_ids[0, input_ids.shape[1]:]).strip()
+        if args.verbose:
+            print("Sending: " + outputs)
         await websocket.send(outputs)
 
 def main(args):
@@ -90,14 +96,14 @@ def main(args):
         else:
             args.conv_mode = "llava_v0"
 
-    start_server = websockets.serve(lambda ws, path: inference(ws, path, args, model, tokenizer, image_processor, model.config, model.device), "0.0.0.0", args.websocket_port)
-    print(f"WebSocket server started at ws://{socket.gethostbyname(socket.gethostname())}:{args.websocket_port}")
+    start_server = websockets.serve(lambda ws, path: inference(ws, path, args, model, tokenizer, image_processor, model.config, model.device), "0.0.0.0", args.port, max_size=None)
+    print(f"WebSocket server started at ws://{socket.gethostbyname(socket.gethostname())}:{args.port}")
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model-path", type=str, default="facebook/opt-350m")
+    parser.add_argument("--model-path", type=str, default="liuhaotian/llava-v1.5-13b")
     parser.add_argument("--model-base", type=str, default=None)
     parser.add_argument("--device", type=str, default="cuda")
     parser.add_argument("--conv-mode", type=str, default=None)
@@ -106,6 +112,7 @@ if __name__ == "__main__":
     parser.add_argument("--load-8bit", action="store_true")
     parser.add_argument("--load-4bit", action="store_true")
     parser.add_argument("--debug", action="store_true")
-    parser.add_argument("--websocket-port", type=int, default=1995)
+    parser.add_argument("--port", type=int, default=1995)
+    parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
     main(args)
