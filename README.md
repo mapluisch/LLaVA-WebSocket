@@ -68,7 +68,7 @@ The WebSocket server waits for a JSON object:
 and returns the written inference result via the socket connection.
 
 ### Demo
-https://github.com/mapluisch/LLaVA-WebSocket-Server/assets/31780571/8d8daaae-92e2-4da1-bfbd-bae873d51716
+https://github.com/mapluisch/LLaVA-WebSocket-Server/assets/31780571/db3639e8-1aa8-4be3-8fb5-3ab9ad0e27d0
 
 The input image is LLaVA's test image: 
 
