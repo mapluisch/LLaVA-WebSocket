@@ -19,8 +19,6 @@ You should follow the LLaVA tutorial, so that you have the pretrained model / ch
 python llava-websocket.py [ARGS]
 ```
 
-8-bit quantization should also work, but I have not tested it due to VRAM constraints.
-
 ### Arguments
 
 Given that this project is based on LLaVA's `cli.py`, the same arguments can be specified
